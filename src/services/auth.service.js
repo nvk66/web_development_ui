@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8080/api/";
+const API_URL = "http://localhost:8080/";
 
 class AuthService {
 
@@ -14,7 +14,7 @@ class AuthService {
 
     login(login, password) {
         return axios
-            .post(API_URL + "login", {
+            .post(API_URL + "api/login", {
                 login,
                 password
             })
@@ -24,7 +24,6 @@ class AuthService {
                     const user = {
                         login: parsedToken.sub,
                         roles: parsedToken.roles,
-                        // token: JSON.stringify(response.data)
                         accessToken: response.data.accessToken,
                         refreshToken: response.data.refreshToken
                     }
@@ -41,7 +40,7 @@ class AuthService {
     }
 
     register(login, password) {
-        return axios.post(API_URL + "signup", {
+        return axios.post(API_URL + "users/", {
             login,
             password
         });

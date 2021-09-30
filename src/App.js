@@ -7,6 +7,7 @@ import "./App.css";
 import AuthService from "./services/auth.service";
 
 import Login from "./components/login.component";
+import Hotel from "./components/hotel.component";
 import Register from "./components/register.component";
 import Home from "./components/home.component";
 import Profile from "./components/profile.component";
@@ -33,6 +34,9 @@ class App extends Component {
                 accessToken: '',
                 refreshToken: ''
             },
+            showRegister: false,
+            showLogin: false,
+            showLogout: false,
         };
     }
 
@@ -52,8 +56,15 @@ class App extends Component {
                 showMovieBoard: user.roles.includes('ROLE_MOVIE_MANAGER'),
                 showStudentBoard: user.roles.includes('ROLE_STUDENT_MANAGER'),
                 showAdminBoard: true,
+                showLogout: true
+            });
+        } else {
+            this.setState({
+                showLogin: true,
+                showRegister: true
             });
         }
+
 
         EventBus.on("logout", () => {
             this.logOut();
@@ -67,14 +78,17 @@ class App extends Component {
     logOut() {
         AuthService.logout();
         this.setState({
-            showModeratorBoard: false,
-            showAdminBoard: false,
+            showHotelBoard: false,
+            showUsersBoard: false,
             currentUser: undefined,
         });
     }
 
     render() {
-        const {currentUser, showHotelBoard, showUsersBoard, showMovieBoard, showStudentBoard} = this.state;
+        const {
+            currentUser, showHotelBoard, showUsersBoard, showMovieBoard, showStudentBoard,
+            showRegister, showLogin, showLogout
+        } = this.state;
 
         return (
             <div>
@@ -91,7 +105,7 @@ class App extends Component {
 
                         {showHotelBoard && (
                             <li className="nav-item">
-                                <Link to={"/mod"} className="nav-link">
+                                <Link to={"/hotel"} className="nav-link">
                                     Hotel Board
                                 </Link>
                             </li>
@@ -123,14 +137,6 @@ class App extends Component {
 
                         {currentUser && (
                             <li className="nav-item">
-                                <Link to={"/user"} className="nav-link">
-                                    User
-                                </Link>
-                            </li>
-                        )}
-
-                        {currentUser && (
-                            <li className="nav-item">
                                 <Link to={"/profile"} className="nav-link">
                                     Profile
                                 </Link>
@@ -138,34 +144,31 @@ class App extends Component {
                         )}
                     </div>
 
-                    {currentUser ? (
-                        <div className="navbar-nav ml-auto">
-                            <li className="nav-item">
-                                <Link to={"/profile"} className="nav-link">
-                                    {currentUser.username}
-                                </Link>
-                            </li>
+                    <div className="navbar-nav ml-auto">
+                        {showLogout && (
                             <li className="nav-item">
                                 <a href="/login" className="nav-link" onClick={this.logOut}>
                                     LogOut
                                 </a>
                             </li>
-                        </div>
-                    ) : (
-                        <div className="navbar-nav ml-auto">
+                        )}
+
+                        {showLogin && (
                             <li className="nav-item">
                                 <Link to={"/login"} className="nav-link">
                                     Login
                                 </Link>
                             </li>
+                        )}
 
+                        {showRegister && (
                             <li className="nav-item">
                                 <Link to={"/register"} className="nav-link">
                                     Sign Up
                                 </Link>
                             </li>
-                        </div>
-                    )}
+                        )}
+                    </div>
                 </nav>
 
                 <div className="container mt-3">
@@ -174,6 +177,7 @@ class App extends Component {
                         <Route exact path="/login" component={Login}/>
                         <Route exact path="/register" component={Register}/>
                         <Route exact path="/profile" component={Profile}/>
+                        <Route exact path="/hotel" component={Hotel}/>
                         <Route path="/user" component={BoardUser}/>
                         <Route path="/mod" component={BoardModerator}/>
                         <Route path="/admin" component={BoardAdmin}/>

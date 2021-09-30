@@ -28,13 +28,6 @@ export default class Profile extends Component {
         }
 
         const {currentUser} = this.state;
-        // const parsedToken = () => {
-        //     try {
-        //         return JSON.parse(atob(currentUser.accessToken.split('.')[1]));
-        //     } catch (e) {
-        //         return null;
-        //     }
-        // }
 
         return (
             <div className="container">
