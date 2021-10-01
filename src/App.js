@@ -103,6 +103,14 @@ class App extends Component {
                             </Link>
                         </li>
 
+                        {currentUser && (
+                            <li className="nav-item">
+                                <Link to={"/profile"} className="nav-link">
+                                    Profile
+                                </Link>
+                            </li>
+                        )}
+
                         {showHotelBoard && (
                             <li className="nav-item">
                                 <Link to={"/hotel"} className="nav-link">
@@ -113,7 +121,7 @@ class App extends Component {
 
                         {showUsersBoard && (
                             <li className="nav-item">
-                                <Link to={"/admin"} className="nav-link">
+                                <Link to={"/user"} className="nav-link">
                                     Users Board
                                 </Link>
                             </li>
@@ -121,27 +129,20 @@ class App extends Component {
 
                         {showMovieBoard && (
                             <li className="nav-item">
-                                <Link to={"/admin"} className="nav-link">
-                                    Users Board
+                                <Link to={"/movie"} className="nav-link">
+                                    Movie Board
                                 </Link>
                             </li>
                         )}
 
                         {showStudentBoard && (
                             <li className="nav-item">
-                                <Link to={"/admin"} className="nav-link">
+                                <Link to={"/student"} className="nav-link">
                                     Users Board
                                 </Link>
                             </li>
                         )}
 
-                        {currentUser && (
-                            <li className="nav-item">
-                                <Link to={"/profile"} className="nav-link">
-                                    Profile
-                                </Link>
-                            </li>
-                        )}
                     </div>
 
                     <div className="navbar-nav ml-auto">
@@ -178,6 +179,8 @@ class App extends Component {
                         <Route exact path="/register" component={Register}/>
                         <Route exact path="/profile" component={Profile}/>
                         <Route exact path="/hotel" component={Hotel}/>
+                        <Route exact path="/movie" component={Hotel}/>
+                        <Route exact path="/student" component={Hotel}/>
                         <Route path="/user" component={BoardUser}/>
                         <Route path="/mod" component={BoardModerator}/>
                         <Route path="/admin" component={BoardAdmin}/>
