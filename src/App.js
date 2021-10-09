@@ -2,21 +2,26 @@ import React, {Component} from "react";
 import {Switch, Route, Link} from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
-// import AuthVerify from "./common/auth-verify";
+import AuthVerify from "./common/auth-verify";
 
 import AuthService from "./services/auth.service";
 
-import Login from "./components/login.component";
-import Hotel from "./components/hotel.component";
-import Register from "./components/register.component";
+import Login from "./components/auth/login.component";
+import Hotel from "./components/hotel/hotel.component";
+import Register from "./components/auth/register.component";
 import Home from "./components/home.component";
-import Profile from "./components/profile.component";
+import Profile from "./components/auth/profile.component";
 import BoardUser from "./components/board-user.component";
 import BoardModerator from "./components/board-moderator.component";
 import BoardAdmin from "./components/board-admin.component";
 
 // import AuthVerify from "./common/auth-verify";
 import EventBus from "./common/EventBus";
+import HotelView from "./components/hotel/hotel.view.component";
+import Movie from "./components/movie/movie.component";
+import MovieView from "./components/movie/movie.view.component";
+import StudentView from "./components/student/student.view.component";
+import Student from "./components/student/student.component";
 
 class App extends Component {
     constructor(props) {
@@ -80,6 +85,9 @@ class App extends Component {
         this.setState({
             showHotelBoard: false,
             showUsersBoard: false,
+            showMovieBoard: false,
+            showStudentBoard: false,
+            showAdminBoard: false,
             currentUser: undefined,
         });
     }
@@ -113,7 +121,7 @@ class App extends Component {
 
                         {showHotelBoard && (
                             <li className="nav-item">
-                                <Link to={"/hotel"} className="nav-link">
+                                <Link to={"/hotels"} className="nav-link">
                                     Hotel Board
                                 </Link>
                             </li>
@@ -129,7 +137,7 @@ class App extends Component {
 
                         {showMovieBoard && (
                             <li className="nav-item">
-                                <Link to={"/movie"} className="nav-link">
+                                <Link to={"/movies"} className="nav-link">
                                     Movie Board
                                 </Link>
                             </li>
@@ -137,8 +145,8 @@ class App extends Component {
 
                         {showStudentBoard && (
                             <li className="nav-item">
-                                <Link to={"/student"} className="nav-link">
-                                    Users Board
+                                <Link to={"/students"} className="nav-link">
+                                    Student Board
                                 </Link>
                             </li>
                         )}
@@ -178,16 +186,22 @@ class App extends Component {
                         <Route exact path="/login" component={Login}/>
                         <Route exact path="/register" component={Register}/>
                         <Route exact path="/profile" component={Profile}/>
-                        <Route exact path="/hotel" component={Hotel}/>
-                        <Route exact path="/movie" component={Hotel}/>
-                        <Route exact path="/student" component={Hotel}/>
+                        <Route exact path="/hotels" component={Hotel} />
+                        <Route exact path="/movies" component={Movie}/>
+                        <Route exact path="/students" component={Student}/>
                         <Route path="/user" component={BoardUser}/>
                         <Route path="/mod" component={BoardModerator}/>
                         <Route path="/admin" component={BoardAdmin}/>
+                        <Route exact path="/hotel" component={HotelView} />
+                        <Route exact path="/hotel/:id" component={HotelView} />
+                        <Route exact path="/movie" component={MovieView} />
+                        <Route exact path="/movie/:id" component={MovieView} />
+                        <Route exact path="/student" component={StudentView} />
+                        <Route exact path="/student/:id" component={StudentView} />
                     </Switch>
                 </div>
 
-                { /*<AuthVerify logOut={this.logOut}/> */}
+                { <AuthVerify logOut={this.logOut}/> }
             </div>
         );
     }

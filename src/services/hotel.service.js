@@ -12,8 +12,12 @@ class HotelService {
         return axios.delete(API_URL + 'hotel/' + id, {headers: authHeader()})
     }
 
-    addHotel() {
+    addHotel(hotel) {
+        return axios.post(API_URL + 'hotel/', hotel, {headers: authHeader()})
+    }
 
+    updateHotel(id, hotel) {
+        return axios.put(API_URL + 'hotel/' + id, hotel, {headers: authHeader()});
     }
 
     getAllHotels() {

@@ -4,7 +4,7 @@ import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import {isEmail} from "validator";
 
-import AuthService from "../services/auth.service";
+import AuthService from "../../services/auth.service";
 
 const required = value => {
     if (!value) {
@@ -20,7 +20,7 @@ const login = value => {
     if (!isEmail(value)) {
         return (
             <div className="alert alert-danger" role="alert">
-                This is not a valid login.
+                This is not a valid email.
             </div>
         );
     }
