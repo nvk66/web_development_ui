@@ -2,18 +2,10 @@ import React, {Component} from "react";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
+import ValidationService from  "../../validation/validate.field"
 
 import AuthService from "../../services/auth.service";
-
-const required = value => {
-    if (!value) {
-        return (
-            <div className="alert alert-danger" role="alert">
-                This field is required!
-            </div>
-        );
-    }
-};
+import InputComponent from "../common/input.component";
 
 export default class Login extends Component {
     constructor(props) {
@@ -95,18 +87,15 @@ export default class Login extends Component {
                             this.form = c;
                         }}
                     >
-                        <div className="form-group">
-                            <label htmlFor="login">Login</label>
-                            <Input
-                                type="text"
-                                className="form-control"
-                                name="login"
-                                value={this.state.login}
-                                onChange={this.onChangeLogin}
-                                validations={[required]}
-                            />
-                        </div>
-
+                        <InputComponent
+                            onChange={this.onChangeLogin}
+                            value={this.state.login}
+                            name={'Login'}
+                            id={'login'}
+                            validations={
+                                [ValidationService.required]
+                            }
+                        />
                         <div className="form-group">
                             <label htmlFor="password">Password</label>
                             <Input
@@ -115,7 +104,7 @@ export default class Login extends Component {
                                 name="password"
                                 value={this.state.password}
                                 onChange={this.onChangePassword}
-                                validations={[required]}
+                                validations={[ValidationService.required]}
                             />
                         </div>
 

@@ -4,6 +4,7 @@ import AuthService from "../../services/auth.service";
 import HotelService from "../../services/hotel.service"
 import {Link} from "react-router-dom";
 import "./hotel.css";
+import ComponentLibrary from "../common/view.element.component";
 
 const hotels = async () => {
     try {
@@ -43,16 +44,15 @@ export default class Hotel extends Component {
             this.setState({
                 redirect: "/home"
             });
+        } else {
+            hotels().then(response => {
+                this.setState({
+                    currentUser: currentUser,
+                    userReady: true,
+                    hotels: response
+                })
+            });
         }
-
-        hotels().then(response => {
-            this.setState({
-                currentUser: currentUser,
-                userReady: true,
-                hotels: response
-            })
-        });
-
     }
 
     render() {
@@ -64,26 +64,6 @@ export default class Hotel extends Component {
 
         return (
             <div className="list row">
-                {/*<div className="col-md-8">*/}
-                {/*    <div className="input-group mb-3">*/}
-                {/*        <input*/}
-                {/*            type="text"*/}
-                {/*            className="form-control"*/}
-                {/*            placeholder="Search by title"*/}
-                {/*            value={this.state.currentHotel}*/}
-                {/*            onChange={this.onChangeSearchTitle}*/}
-                {/*        />*/}
-                {/*        <div className="input-group-append">*/}
-                {/*            <button*/}
-                {/*                className="btn btn-outline-secondary"*/}
-                {/*                type="button"*/}
-                {/*                onClick={this.searchTitle}*/}
-                {/*            >*/}
-                {/*                Search*/}
-                {/*            </button>*/}
-                {/*        </div>*/}
-                {/*    </div>*/}
-                {/*</div>*/}
                 <div className="col-md-6">
                     <div className="mb-5">
                         <h4 className="creation mr-2">Hotel List</h4>
@@ -110,17 +90,10 @@ export default class Hotel extends Component {
                             </li>
                         ))}
                     </ul>
-
-                    {/*<button*/}
-                    {/*    className="m-3 btn btn-sm btn-danger"*/}
-                    {/*    onClick={this.removeAllTutorials}*/}
-                    {/*>*/}
-                    {/*    Remove All*/}
-                    {/*</button>*/}
                 </div>
                 <div className="col-md-6">
                     {currentHotel ? (
-                        <div>
+                        <div className="mt-5">
                             <div>
                                 <h4 className="float-left mr-2">Hotel</h4>
                                 <Link
@@ -130,30 +103,10 @@ export default class Hotel extends Component {
                                     Show
                                 </Link>
                             </div>
-                            <div>
-                                <label>
-                                    <strong>Name:</strong>
-                                </label>{" "}
-                                {currentHotel.name}
-                            </div>
-                            <div>
-                                <label>
-                                    <strong>Count Visitors:</strong>
-                                </label>{" "}
-                                {currentHotel.countVisitor}
-                            </div>
-                            <div>
-                                <label>
-                                    <strong>Address:</strong>
-                                </label>{" "}
-                                {currentHotel.address}
-                            </div>
-                            <div>
-                                <label>
-                                    <strong>Director Name:</strong>
-                                </label>{" "}
-                                {currentHotel.directorName}
-                            </div>
+                            {ComponentLibrary.listDiv('Name', currentHotel.name)}
+                            {ComponentLibrary.listDiv('Address', currentHotel.address)}
+                            {ComponentLibrary.listDiv('Director Name', currentHotel.directorName)}
+                            {ComponentLibrary.listDiv('Count Visitors', currentHotel.countVisitor)}
                         </div>
                     ) : (
                         <div>

@@ -4,47 +4,7 @@ import Form from "react-validation/build/form";
 import StudentService from "../../services/student.service"
 import AuthService from "../../services/auth.service";
 import {Redirect} from "react-router-dom";
-import {isEmail} from "validator";
-
-const required = value => {
-    if (!value) {
-        return (
-            <div className="alert alert-danger" role="alert">
-                This field is required!
-            </div>
-        );
-    }
-};
-
-const inputStringLength = value => {
-    if (value.length < 0 || value.length > 64) {
-        return (
-            <div className="alert alert-danger" role="alert">
-                The input field must be between 1 and 64 characters.
-            </div>
-        );
-    }
-};
-
-const subgroupInput = value => {
-    if (value !== '1' && value !== '2') {
-        return (
-            <div className="alert alert-danger" role="alert">
-                The subgroup field must be 1 or 2.
-            </div>
-        );
-    }
-}
-
-const emailInput = value => {
-    if (!isEmail(value)) {
-        return (
-            <div className="alert alert-danger" role="alert">
-                This is not a valid email.
-            </div>
-        );
-    }
-};
+import ValidationService from "../../validation/validate.field";
 
 export default class StudentView extends Component {
     constructor(props) {
@@ -276,7 +236,10 @@ export default class StudentView extends Component {
                                             value={currentStudent.name}
                                             onChange={this.onChangeName}
                                             name="name"
-                                            validations={[required, inputStringLength]}
+                                            validations={[
+                                                ValidationService.required,
+                                                ValidationService.inputStringLength
+                                            ]}
                                         />
                                     </div>
 
@@ -290,7 +253,10 @@ export default class StudentView extends Component {
                                             value={currentStudent.email}
                                             onChange={this.onChangeEmail}
                                             name="email"
-                                            validations={[required, emailInput]}
+                                            validations={[
+                                                ValidationService.required,
+                                                ValidationService.login
+                                            ]}
                                         />
                                     </div>
 
@@ -304,7 +270,10 @@ export default class StudentView extends Component {
                                             value={currentStudent.cardNumber}
                                             onChange={this.onChangeCardNumber}
                                             name="cardNumber"
-                                            validations={[required, inputStringLength]}
+                                            validations={[
+                                                ValidationService.required,
+                                                ValidationService.inputStringLength
+                                            ]}
                                         />
                                     </div>
 
@@ -318,7 +287,10 @@ export default class StudentView extends Component {
                                             value={currentStudent.groupName}
                                             onChange={this.onChangeGroupName}
                                             name="groupName"
-                                            validations={[required, inputStringLength]}
+                                            validations={[
+                                                ValidationService.required,
+                                                ValidationService.inputStringLength
+                                            ]}
                                         />
                                     </div>
 
@@ -332,7 +304,10 @@ export default class StudentView extends Component {
                                             value={currentStudent.subgroup}
                                             onChange={this.onChangeSubgroup}
                                             name="subgroup"
-                                            validations={[required, subgroupInput]}
+                                            validations={[
+                                                ValidationService.required,
+                                                ValidationService.subgroupInput
+                                            ]}
                                         />
                                     </div>
                                 </Form>

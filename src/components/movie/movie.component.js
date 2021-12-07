@@ -4,6 +4,7 @@ import AuthService from "../../services/auth.service";
 import MovieService from "../../services/movie.service"
 import {Link} from "react-router-dom";
 import "./movie.css";
+import ComponentLibrary from "../common/view.element.component";
 
 const movies = async () => {
     try {
@@ -62,26 +63,6 @@ export default class Movie extends Component {
 
         return (
             <div className="list row">
-                {/*<div className="col-md-8">*/}
-                {/*    <div className="input-group mb-3">*/}
-                {/*        <input*/}
-                {/*            type="text"*/}
-                {/*            className="form-control"*/}
-                {/*            placeholder="Search by title"*/}
-                {/*            value={this.state.currentMovie}*/}
-                {/*            onChange={this.onChangeSearchTitle}*/}
-                {/*        />*/}
-                {/*        <div className="input-group-append">*/}
-                {/*            <button*/}
-                {/*                className="btn btn-outline-secondary"*/}
-                {/*                type="button"*/}
-                {/*                onClick={this.searchTitle}*/}
-                {/*            >*/}
-                {/*                Search*/}
-                {/*            </button>*/}
-                {/*        </div>*/}
-                {/*    </div>*/}
-                {/*</div>*/}
                 <div className="col-md-6">
                     <div className="mb-5">
                         <h4 className="creation mr-2">Movie List</h4>
@@ -121,18 +102,8 @@ export default class Movie extends Component {
                                     Show
                                 </Link>
                             </div>
-                            <div>
-                                <label>
-                                    <strong>Name:</strong>
-                                </label>{" "}
-                                {currentMovie.name}
-                            </div>
-                            <div>
-                                <label>
-                                    <strong>Author:</strong>
-                                </label>{" "}
-                                {currentMovie.author}
-                            </div>
+                            {ComponentLibrary.listDiv('Name', currentMovie.name)}
+                            {ComponentLibrary.listDiv('Author', currentMovie.author)}
                         </div>
                     ) : (
                         <div>

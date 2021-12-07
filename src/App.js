@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {Switch, Route, Link} from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
-import AuthVerify from "./common/auth-verify";
+import AuthVerify from "./shared/auth-verify";
 
 import AuthService from "./services/auth.service";
 
@@ -11,12 +11,9 @@ import Hotel from "./components/hotel/hotel.component";
 import Register from "./components/auth/register.component";
 import Home from "./components/home.component";
 import Profile from "./components/auth/profile.component";
-import BoardUser from "./components/board-user.component";
-import BoardModerator from "./components/board-moderator.component";
-import BoardAdmin from "./components/board-admin.component";
 
-// import AuthVerify from "./common/auth-verify";
-import EventBus from "./common/EventBus";
+// import AuthVerify from "./shared/auth-verify";
+import EventBus from "./shared/EventBus";
 import HotelView from "./components/hotel/hotel.view.component";
 import Movie from "./components/movie/movie.component";
 import MovieView from "./components/movie/movie.view.component";
@@ -127,14 +124,6 @@ class App extends Component {
                             </li>
                         )}
 
-                        {showUsersBoard && (
-                            <li className="nav-item">
-                                <Link to={"/user"} className="nav-link">
-                                    Users Board
-                                </Link>
-                            </li>
-                        )}
-
                         {showMovieBoard && (
                             <li className="nav-item">
                                 <Link to={"/movies"} className="nav-link">
@@ -189,9 +178,6 @@ class App extends Component {
                         <Route exact path="/hotels" component={Hotel} />
                         <Route exact path="/movies" component={Movie}/>
                         <Route exact path="/students" component={Student}/>
-                        <Route path="/user" component={BoardUser}/>
-                        <Route path="/mod" component={BoardModerator}/>
-                        <Route path="/admin" component={BoardAdmin}/>
                         <Route exact path="/hotel" component={HotelView} />
                         <Route exact path="/hotel/:id" component={HotelView} />
                         <Route exact path="/movie" component={MovieView} />

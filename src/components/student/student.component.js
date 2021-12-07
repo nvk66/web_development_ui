@@ -4,6 +4,7 @@ import AuthService from "../../services/auth.service";
 import StudentService from "../../services/student.service"
 import {Link} from "react-router-dom";
 import "./student.css";
+import ComponentLibrary from "../common/view.element.component";
 
 const students = async () => {
     try {
@@ -64,26 +65,6 @@ export default class Student extends Component {
 
         return (
             <div className="list row">
-                {/*<div className="col-md-8">*/}
-                {/*    <div className="input-group mb-3">*/}
-                {/*        <input*/}
-                {/*            type="text"*/}
-                {/*            className="form-control"*/}
-                {/*            placeholder="Search by title"*/}
-                {/*            value={this.state.currentStudent}*/}
-                {/*            onChange={this.onChangeSearchTitle}*/}
-                {/*        />*/}
-                {/*        <div className="input-group-append">*/}
-                {/*            <button*/}
-                {/*                className="btn btn-outline-secondary"*/}
-                {/*                type="button"*/}
-                {/*                onClick={this.searchTitle}*/}
-                {/*            >*/}
-                {/*                Search*/}
-                {/*            </button>*/}
-                {/*        </div>*/}
-                {/*    </div>*/}
-                {/*</div>*/}
                 <div className="col-md-6">
                     <div className="mb-5">
                         <h4 className="creation mr-2">Student List</h4>
@@ -123,36 +104,11 @@ export default class Student extends Component {
                                     Show
                                 </Link>
                             </div>
-                            <div>
-                                <label>
-                                    <strong>Name:</strong>
-                                </label>{" "}
-                                {currentStudent.name}
-                            </div>
-                            <div>
-                                <label>
-                                    <strong>Email:</strong>
-                                </label>{" "}
-                                {currentStudent.email}
-                            </div>
-                            <div>
-                                <label>
-                                    <strong>Card Number:</strong>
-                                </label>{" "}
-                                {currentStudent.cardNumber}
-                            </div>
-                            <div>
-                                <label>
-                                    <strong>Group Name:</strong>
-                                </label>{" "}
-                                {currentStudent.groupName}
-                            </div>
-                            <div>
-                                <label>
-                                    <strong>Subgroup:</strong>
-                                </label>{" "}
-                                {currentStudent.subgroup}
-                            </div>
+                            {ComponentLibrary.listDiv('Name', currentStudent.name)}
+                            {ComponentLibrary.listDiv('Email', currentStudent.email)}
+                            {ComponentLibrary.listDiv('Card Number', currentStudent.cardNumber)}
+                            {ComponentLibrary.listDiv('Group Name', currentStudent.groupName)}
+                            {ComponentLibrary.listDiv('Subgroup', currentStudent.subgroup)}
                         </div>
                     ) : (
                         <div>

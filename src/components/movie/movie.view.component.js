@@ -1,29 +1,11 @@
 import React, {Component} from "react";
-import Input from "react-validation/build/input";
 import Form from "react-validation/build/form";
 import MovieService from "../../services/movie.service"
 import AuthService from "../../services/auth.service";
 import {Redirect} from "react-router-dom";
-
-const required = value => {
-    if (!value) {
-        return (
-            <div className="alert alert-danger" role="alert">
-                This field is required!
-            </div>
-        );
-    }
-};
-
-const inputStringLength = value => {
-    if (value.length < 0 || value.length > 64) {
-        return (
-            <div className="alert alert-danger" role="alert">
-                The input field must be between 1 and 64 characters.
-            </div>
-        );
-    }
-};
+import ValidationService from "../../validation/validate.field";
+import InputComponent from "../common/input.component";
+import ButtonComponent from "../common/button.component";
 
 export default class MovieView extends Component {
     constructor(props) {
@@ -57,12 +39,12 @@ export default class MovieView extends Component {
             this.setState({
                 redirect: "/home"
             });
-        }
-
-        const id = this.props.match.params.id;
-        console.log(id);
-        if (id) {
-            this.getMovie(id);
+        } else {
+            const id = this.props.match.params.id;
+            console.log(id);
+            if (id) {
+                this.getMovie(id);
+            }
         }
     }
 
@@ -102,7 +84,8 @@ export default class MovieView extends Component {
             },
             created: false,
             updated: false,
-            message: ''
+            message: '',
+            loading: false
         });
     }
 
@@ -197,68 +180,37 @@ export default class MovieView extends Component {
                         </div>
                     ) : (
                         <div>
-                            {<div>
+                            <div>
                                 <h4>Movie</h4>
                                 <Form>
-                                    <div className="form-group">
-                                        <label htmlFor="name">Name</label>
-                                        <Input
-                                            type="text"
-                                            className="form-control"
-                                            id="name"
-                                            required
-                                            value={currentMovie.name}
-                                            onChange={this.onChangeName}
-                                            name="name"
-                                            validations={[required, inputStringLength]}
-                                        />
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label htmlFor="author">Author</label>
-                                        <Input
-                                            type="text"
-                                            className="form-control"
-                                            id="author"
-                                            required
-                                            value={currentMovie.author}
-                                            onChange={this.onChangeAuthor}
-                                            name="author"
-                                            validations={[required, inputStringLength]}
-                                        />
-                                    </div>
+                                    <InputComponent
+                                        onChange={this.onChangeName}
+                                        value={currentMovie.name}
+                                        name={'Name'}
+                                        id={'name'}
+                                        validations={
+                                            [ValidationService.required,
+                                                ValidationService.inputStringLength]
+                                        }
+                                    />
+                                    <InputComponent
+                                        onChange={this.onChangeAuthor}
+                                        value={currentMovie.author}
+                                        name={'Author'}
+                                        id={'author'}
+                                        validations={
+                                            [ValidationService.required,
+                                                ValidationService.inputStringLength]
+                                        }
+                                    />
                                 </Form>
                             </div>
-                            }
-                            {currentMovie.id ? (
-                                <div>
-                                    <button
-                                        className="btn btn-danger mr-2"
-                                        onClick={this.deleteMovie}
-                                    >
-                                        Delete
-                                    </button>
-
-                                    <button
-                                        type="submit"
-                                        className="btn btn-success"
-                                        onClick={this.updateMovie}
-                                    >
-                                        Update
-                                    </button>
-                                </div>
-                            ) : (
-                                <div>
-                                    <button
-                                        type="submit"
-                                        className="btn btn-success"
-                                        onClick={this.createMovie}
-                                    >
-                                        Create
-                                    </button>
-                                </div>
-                            )
-                            }
+                            <ButtonComponent
+                                id={currentMovie.id}
+                                create={this.createMovie}
+                                update={this.updateMovie}
+                                deleteFunc={this.deleteMovie}
+                            />
                         </div>
                     )
                 )}

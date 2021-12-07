@@ -4,36 +4,10 @@ import Form from "react-validation/build/form";
 import HotelService from "../../services/hotel.service"
 import AuthService from "../../services/auth.service";
 import {Redirect} from "react-router-dom";
-
-const required = value => {
-    if (!value) {
-        return (
-            <div className="alert alert-danger" role="alert">
-                This field is required!
-            </div>
-        );
-    }
-};
-
-const inputStringLength = value => {
-    if (value.length < 0 || value.length > 64) {
-        return (
-            <div className="alert alert-danger" role="alert">
-                The input field must be between 1 and 64 characters.
-            </div>
-        );
-    }
-};
-
-const inputNum = value => {
-    if (!(/^[1-9][\d]*$/.test(value))) {
-        return (
-            <div className="alert alert-danger" role="alert">
-                The input field must be positive numeric.
-            </div>
-        );
-    }
-};
+import CheckButton from "react-validation/build/button";
+import ValidationService from "../../validation/validate.field";
+import InputComponent from "../common/input.component";
+import ButtonComponent from "../common/button.component";
 
 export default class HotelView extends Component {
     constructor(props) {
@@ -60,7 +34,8 @@ export default class HotelView extends Component {
             },
             created: false,
             updated: false,
-            message: ''
+            message: '',
+            loading: false
         };
     }
 
@@ -71,12 +46,12 @@ export default class HotelView extends Component {
             this.setState({
                 redirect: "/home"
             });
-        }
-
-        const id = this.props.match.params.id;
-        console.log(id);
-        if (id) {
-            this.getHotel(id);
+        } else {
+            const id = this.props.match.params.id;
+            console.log(id);
+            if (id) {
+                this.getHotel(id);
+            }
         }
     }
 
@@ -171,19 +146,32 @@ export default class HotelView extends Component {
     }
 
     updateHotel() {
-        HotelService.updateHotel(
-            this.state.currentHotel.id,
-            this.state.currentHotel
-        ).then(response => {
-            console.log(response.data);
-            this.setState({
-                message: "The hotel was updated successfully!",
-                updated: true
-            });
-            // this.props.history.push('/hotels');
-        }).catch(e => {
-            console.log(e);
+        this.setState({
+            message: '',
+            loading: true
         });
+
+        this.form.validateAll();
+
+        if (this.checkBtn.context._errors.length === 0) {
+            HotelService.updateHotel(
+                this.state.currentHotel.id,
+                this.state.currentHotel
+            ).then(response => {
+                console.log(response.data);
+                this.setState({
+                    message: "The hotel was updated successfully!",
+                    updated: true
+                });
+                // this.props.history.push('/hotels');
+            }).catch(e => {
+                console.log(e);
+            });
+        } else {
+            this.setState({
+                loading: false
+            });
+        }
     }
 
     deleteHotel() {
@@ -195,17 +183,32 @@ export default class HotelView extends Component {
         });
     }
 
-    createHotel() {
-        HotelService.addHotel(
-            this.state.currentHotel
-        ).then(response => {
-            console.log(response.data);
+    createHotel(e) {
+        e.preventDefault();
+
+        this.setState({
+            message: '',
+            loading: true
+        });
+
+        this.form.validateAll();
+
+        if (this.checkBtn.context._errors.length === 0) {
+            HotelService.addHotel(
+                this.state.currentHotel
+            ).then(response => {
+                console.log(response.data);
+                this.setState({
+                    message: 'The hotel was created successfully!',
+                    created: true,
+                    loading: false
+                });
+            })
+        } else {
             this.setState({
-                message: "The hotel was created successfully!",
-                created: true
+                loading: false
             });
-            // this.props.history.push('/hotels');
-        })
+        }
     }
 
     render() {
@@ -239,93 +242,73 @@ export default class HotelView extends Component {
                         <div>
                             {<div>
                                 <h4>Hotel</h4>
-                                <Form>
-                                    <div className="form-group">
-                                        <label htmlFor="name">Name</label>
-                                        <Input
-                                            type="text"
-                                            className="form-control"
-                                            id="name"
-                                            required
-                                            value={currentHotel.name}
-                                            onChange={this.onChangeName}
-                                            name="name"
-                                            validations={[required, inputStringLength]}
-                                        />
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label htmlFor="directorName">Director Name</label>
-                                        <Input
-                                            type="text"
-                                            className="form-control"
-                                            id="directorName"
-                                            required
-                                            value={currentHotel.directorName}
-                                            onChange={this.onChangeDirectorName}
-                                            name="directorName"
-                                            validations={[required, inputStringLength]}
-                                        />
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label htmlFor="countVisitor">Count Visitors</label>
-                                        <Input
-                                            type="text"
-                                            className="form-control"
-                                            id="countVisitor"
-                                            required
-                                            value={currentHotel.countVisitor}
-                                            onChange={this.onChangeCountVisitors}
-                                            name="countVisitor"
-                                            validations={[required, inputNum]}
-                                        />
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label htmlFor="address">Address</label>
-                                        <Input
-                                            type="text"
-                                            className="form-control"
-                                            id="address"
-                                            required
-                                            value={currentHotel.address}
-                                            onChange={this.onChangeAddress}
-                                            name="address"
-                                            validations={[required, inputStringLength]}
-                                        />
-                                    </div>
+                                <Form
+                                    onSubmit={currentHotel.id ? this.createHotel : this.updateHotel}
+                                    ref={c => {
+                                        this.form = c;
+                                    }}
+                                >
+                                    <InputComponent
+                                        onChange={this.onChangeName}
+                                        value={currentHotel.name}
+                                        name={'Name'}
+                                        id={'name'}
+                                        validations={
+                                            [ValidationService.required,
+                                                ValidationService.inputStringLength]
+                                        }
+                                    />
+                                    <InputComponent
+                                        onChange={this.onChangeDirectorName}
+                                        value={currentHotel.directorName}
+                                        name={'Director Name'}
+                                        id={'directorName'}
+                                        validations={
+                                            [ValidationService.required,
+                                                ValidationService.inputStringLength]
+                                        }
+                                    />
+                                    <InputComponent
+                                        onChange={this.onChangeCountVisitors}
+                                        value={currentHotel.countVisitor}
+                                        name={'Count Visitors'}
+                                        id={'countVisitor'}
+                                        validations={
+                                            [ValidationService.required,
+                                                ValidationService.inputNum]
+                                        }
+                                    />
+                                    <InputComponent
+                                        onChange={this.onChangeAddress}
+                                        value={currentHotel.address}
+                                        name={'Address'}
+                                        id={'address'}
+                                        validations={
+                                            [ValidationService.required,
+                                                ValidationService.inputStringLength]
+                                        }
+                                    />
+                                    <ButtonComponent
+                                        id={currentHotel.id}
+                                        create={this.createHotel}
+                                        update={this.updateHotel}
+                                        deleteFunc={this.deleteHotel}
+                                    />
+                                    {this.state.message && (
+                                        <div className="form-group">
+                                            <div className="alert alert-danger" role="alert">
+                                                {this.state.message}
+                                            </div>
+                                        </div>
+                                    )}
+                                    <CheckButton
+                                        style={{display: "none"}}
+                                        ref={c => {
+                                            this.checkBtn = c;
+                                        }}
+                                    />
                                 </Form>
                             </div>
-                            }
-                            {currentHotel.id ? (
-                                <div>
-                                    <button
-                                        className="btn btn-danger mr-2"
-                                        onClick={this.deleteHotel}
-                                    >
-                                        Delete
-                                    </button>
-
-                                    <button
-                                        type="submit"
-                                        className="btn btn-success"
-                                        onClick={this.updateHotel}
-                                    >
-                                        Update
-                                    </button>
-                                </div>
-                            ) : (
-                                <div>
-                                    <button
-                                        type="submit"
-                                        className="btn btn-success"
-                                        onClick={this.createHotel}
-                                    >
-                                        Create
-                                    </button>
-                                </div>
-                            )
                             }
                         </div>
                     )

@@ -2,49 +2,9 @@ import React, {Component} from "react";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
-import {isEmail} from "validator";
+import ValidationService from  "../../validation/validate.field"
 
 import AuthService from "../../services/auth.service";
-
-const required = value => {
-    if (!value) {
-        return (
-            <div className="alert alert-danger" role="alert">
-                This field is required!
-            </div>
-        );
-    }
-};
-
-const login = value => {
-    if (!isEmail(value)) {
-        return (
-            <div className="alert alert-danger" role="alert">
-                This is not a valid email.
-            </div>
-        );
-    }
-};
-
-const loginLength = value => {
-    if (value.length < 3 || value.length > 64) {
-        return (
-            <div className="alert alert-danger" role="alert">
-                The login must be between 3 and 20 characters.
-            </div>
-        );
-    }
-};
-
-const passwordLength = value => {
-    if (value.length < 6 || value.length > 64) {
-        return (
-            <div className="alert alert-danger" role="alert">
-                The password must be between 6 and 40 characters.
-            </div>
-        );
-    }
-};
 
 export default class Register extends Component {
     constructor(props) {
@@ -137,7 +97,11 @@ export default class Register extends Component {
                                         name="login"
                                         value={this.state.login}
                                         onChange={this.onChangeLogin}
-                                        validations={[required, loginLength, login]}
+                                        validations={[
+                                            ValidationService.required,
+                                            ValidationService.loginLength,
+                                            ValidationService.login
+                                        ]}
                                     />
                                 </div>
 
@@ -149,7 +113,10 @@ export default class Register extends Component {
                                         name="password"
                                         value={this.state.password}
                                         onChange={this.onChangePassword}
-                                        validations={[required, passwordLength]}
+                                        validations={[
+                                            ValidationService.required,
+                                            ValidationService.passwordLength
+                                        ]}
                                     />
                                 </div>
 
