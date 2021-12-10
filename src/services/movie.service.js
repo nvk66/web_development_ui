@@ -1,28 +1,38 @@
-import axios from 'axios';
-import authHeader from './auth-header';
+import ApiService from "./api.service";
 
 const API_URL = 'http://localhost:8080/api/';
 
-class MovieService {
-    getMovie(id) {
-        return axios.get(API_URL + 'movies/' + id, {headers: authHeader()})
-    }
-
-    deleteMovie(id) {
-        return axios.delete(API_URL + 'movies/' + id, {headers: authHeader()})
-    }
-
-    addMovie(movie) {
-        return axios.post(API_URL + 'movies/', movie, {headers: authHeader()})
-    }
-
-    updateMovie(id, movie) {
-        return axios.put(API_URL + 'movies/' + id, movie, {headers: authHeader()});
-    }
-
-    getAllMovies() {
-        return axios.get(API_URL + 'movies/', {headers: authHeader()});
-    }
+const getMovie = (id) => {
+    return ApiService.createAuthorizedRequest()
+        .get('movies/' + id)
 }
 
-export default new MovieService();
+const deleteMovie = (id) => {
+    return ApiService.createAuthorizedRequest()
+        .delete('movies/' + id)
+}
+
+const addMovie = (movie) => {
+    return ApiService.createAuthorizedRequest()
+        .post('movies/', movie)
+}
+
+const updateMovie = (id, movie) => {
+    return ApiService.createAuthorizedRequest()
+        .put('movies/' + id, movie);
+}
+
+const getAllMovies = () => {
+    return ApiService.createAuthorizedRequest()
+        .get('movies/');
+}
+
+const MovieService = {
+    getMovie,
+    deleteMovie,
+    addMovie,
+    updateMovie,
+    getAllMovies
+}
+
+export default MovieService;

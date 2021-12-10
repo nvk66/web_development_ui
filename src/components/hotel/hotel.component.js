@@ -5,6 +5,8 @@ import HotelService from "../../services/hotel.service"
 import {Link} from "react-router-dom";
 import "./hotel.css";
 import ComponentLibrary from "../common/view.element.component";
+import InfoComponent from "../common/info.component";
+import TableComponent from "../common/table.component";
 
 const hotels = async () => {
     try {
@@ -12,6 +14,17 @@ const hotels = async () => {
     } catch (e) {
         console.log("Не всё идёт по плану! " + JSON.stringify(e.response.data));
     }
+}
+
+const collectData = (hotel) => {
+    const data = new Map();
+    if (hotel) {
+        data.set('Hotel', hotel.name);
+        data.set('Address', hotel.address);
+        data.set('Director Name', hotel.directorName);
+        data.set('Count Visitors', hotel.countVisitor);
+    }
+    return data;
 }
 
 export default class Hotel extends Component {
@@ -24,7 +37,7 @@ export default class Hotel extends Component {
             redirect: null,
             userReady: false,
             currentIndex: -1,
-            currentUser: {username: ""},
+            currentUser: {username: ''},
             currentHotel: null,
             hotels: []
         };
@@ -64,57 +77,20 @@ export default class Hotel extends Component {
 
         return (
             <div className="list row">
-                <div className="col-md-6">
-                    <div className="mb-5">
-                        <h4 className="creation mr-2">Hotel List</h4>
-                        <Link
-                            to={"/hotel"}
-                            className="btn btn-primary"
-                        >
-                            Create
-                        </Link>
-                    </div>
-
-                    <ul className="list-group">
-                        {hotels &&
-                        hotels.map((hotel, index) => (
-                            <li
-                                className={
-                                    "list-group-item " +
-                                    (index === currentIndex ? "active" : "")
-                                }
-                                onClick={() => this.setActiveHotel(hotel, index)}
-                                key={index}
-                            >
-                                {hotel.name}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-                <div className="col-md-6">
-                    {currentHotel ? (
-                        <div className="mt-5">
-                            <div>
-                                <h4 className="float-left mr-2">Hotel</h4>
-                                <Link
-                                    to={"/hotel/" + currentHotel.id}
-                                    className="btn btn-warning"
-                                >
-                                    Show
-                                </Link>
-                            </div>
-                            {ComponentLibrary.listDiv('Name', currentHotel.name)}
-                            {ComponentLibrary.listDiv('Address', currentHotel.address)}
-                            {ComponentLibrary.listDiv('Director Name', currentHotel.directorName)}
-                            {ComponentLibrary.listDiv('Count Visitors', currentHotel.countVisitor)}
-                        </div>
-                    ) : (
-                        <div>
-                            <br/>
-                            <span className="font-weight-bold">Please click on a Hotel...</span>
-                        </div>
-                    )}
-                </div>
+                <TableComponent
+                    setActive={this.setActiveHotel}
+                    info={'hotel'}
+                    data={hotels}
+                    name={'Hotel'}
+                    value={'name'}
+                    id={currentIndex}
+                />
+                <InfoComponent
+                    info={'hotel'}
+                    name={'Hotel'}
+                    id={currentHotel ? currentHotel.id : null}
+                    data={collectData(currentHotel)}
+                />
             </div>
         );
     }

@@ -5,6 +5,7 @@ import StudentService from "../../services/student.service"
 import AuthService from "../../services/auth.service";
 import {Redirect} from "react-router-dom";
 import ValidationService from "../../validation/validate.field";
+import ButtonComponent from "../common/button.component";
 
 export default class StudentView extends Component {
     constructor(props) {
@@ -313,35 +314,12 @@ export default class StudentView extends Component {
                                 </Form>
                             </div>
                             }
-                            {currentStudent.id ? (
-                                <div>
-                                    <button
-                                        className="btn btn-danger mr-2"
-                                        onClick={this.deleteStudent}
-                                    >
-                                        Delete
-                                    </button>
-
-                                    <button
-                                        type="submit"
-                                        className="btn btn-success"
-                                        onClick={this.updateStudent}
-                                    >
-                                        Update
-                                    </button>
-                                </div>
-                            ) : (
-                                <div>
-                                    <button
-                                        type="submit"
-                                        className="btn btn-success"
-                                        onClick={this.createStudent}
-                                    >
-                                        Create
-                                    </button>
-                                </div>
-                            )
-                            }
+                            <ButtonComponent
+                                id={currentStudent.id}
+                                create={this.createStudent}
+                                update={this.updateStudent}
+                                deleteFunc={this.deleteStudent}
+                            />
                         </div>
                     )
                 )}

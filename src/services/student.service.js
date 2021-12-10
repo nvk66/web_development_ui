@@ -1,28 +1,36 @@
-import axios from 'axios';
-import authHeader from './auth-header';
+import ApiService from "./api.service";
 
-const API_URL = 'http://localhost:8080/api/';
-
-class StudentService {
-    getStudent(id) {
-        return axios.get(API_URL + 'students/' + id, {headers: authHeader()})
-    }
-
-    deleteStudent(id) {
-        return axios.delete(API_URL + 'students/' + id, {headers: authHeader()})
-    }
-
-    addStudent(student) {
-        return axios.post(API_URL + 'students/', student, {headers: authHeader()})
-    }
-
-    updateStudent(id, student) {
-        return axios.put(API_URL + 'students/' + id, student, {headers: authHeader()});
-    }
-
-    getAllStudents() {
-        return axios.get(API_URL + 'students/', {headers: authHeader()});
-    }
+const getStudent = (id) => {
+    return ApiService.createAuthorizedRequest()
+        .get('students/' + id)
 }
 
-export default new StudentService();
+const deleteStudent = (id) => {
+    return ApiService.createAuthorizedRequest()
+        .delete('students/' + id)
+}
+
+const addStudent = (student) => {
+    return ApiService.createAuthorizedRequest()
+        .post('students/', student)
+}
+
+const updateStudent = (id, student) => {
+    return ApiService.createAuthorizedRequest()
+        .put('students/' + id, student);
+}
+
+const getAllStudents = () => {
+    return ApiService.createAuthorizedRequest()
+        .get('students/');
+}
+
+const StudentService = {
+    getStudent,
+    deleteStudent,
+    addStudent,
+    updateStudent,
+    getAllStudents
+}
+
+export default StudentService;

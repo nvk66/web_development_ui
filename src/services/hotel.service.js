@@ -1,28 +1,36 @@
-import axios from 'axios';
-import authHeader from './auth-header';
+import ApiService from "./api.service";
 
-const API_URL = 'http://localhost:8080/api/';
-
-class HotelService {
-    getHotel(id) {
-        return axios.get(API_URL + 'hotel/' + id, {headers: authHeader()})
-    }
-
-    deleteHotel(id) {
-        return axios.delete(API_URL + 'hotel/' + id, {headers: authHeader()})
-    }
-
-    addHotel(hotel) {
-        return axios.post(API_URL + 'hotel/', hotel, {headers: authHeader()})
-    }
-
-    updateHotel(id, hotel) {
-        return axios.put(API_URL + 'hotel/' + id, hotel, {headers: authHeader()});
-    }
-
-    getAllHotels() {
-        return axios.get(API_URL + 'hotel/', {headers: authHeader()});
-    }
+const getHotel = (id) => {
+    return ApiService.createAuthorizedRequest()
+        .get('hotel/' + id)
 }
 
-export default new HotelService();
+const deleteHotel = (id) => {
+    return ApiService.createAuthorizedRequest()
+        .delete('hotel/' + id)
+}
+
+const addHotel = (hotel) => {
+    return ApiService.createAuthorizedRequest()
+        .post('hotel/', hotel)
+}
+
+const updateHotel = (id, hotel) => {
+    return ApiService.createAuthorizedRequest()
+        .put('hotel/' + id, hotel);
+}
+
+const getAllHotels = () => {
+    return ApiService.createAuthorizedRequest()
+        .get('hotel/');
+}
+
+const HotelService = {
+    getHotel,
+    deleteHotel,
+    addHotel,
+    updateHotel,
+    getAllHotels
+}
+
+export default HotelService;

@@ -2,9 +2,9 @@ import React, {Component} from "react";
 import {Redirect} from "react-router-dom";
 import AuthService from "../../services/auth.service";
 import StudentService from "../../services/student.service"
-import {Link} from "react-router-dom";
 import "./student.css";
-import ComponentLibrary from "../common/view.element.component";
+import TableComponent from "../common/table.component";
+import InfoComponent from "../common/info.component";
 
 const students = async () => {
     try {
@@ -13,6 +13,19 @@ const students = async () => {
         console.log("Не всё идёт по плану! " + JSON.stringify(e.response.data));
     }
 }
+
+const collectData = (student) => {
+    const data = new Map();
+    if (student) {
+        data.set('Name', student.name);
+        data.set('Email', student.subgroup);
+        data.set('Card Number', student.email);
+        data.set('Group Name', student.cardNumber);
+        data.set('Subgroup', student.groupName);
+    }
+    return data;
+}
+
 
 export default class Student extends Component {
 
@@ -24,7 +37,7 @@ export default class Student extends Component {
             redirect: null,
             userReady: false,
             currentIndex: -1,
-            currentUser: {username: ""},
+            currentUser: {username: ''},
             currentStudent: null,
             students: []
         };
@@ -65,58 +78,20 @@ export default class Student extends Component {
 
         return (
             <div className="list row">
-                <div className="col-md-6">
-                    <div className="mb-5">
-                        <h4 className="creation mr-2">Student List</h4>
-                        <Link
-                            to={"/student"}
-                            className="btn btn-primary"
-                        >
-                            Create
-                        </Link>
-                    </div>
-
-                    <ul className="list-group">
-                        {students &&
-                        students.map((student, index) => (
-                            <li
-                                className={
-                                    "list-group-item " +
-                                    (index === currentIndex ? "active" : "")
-                                }
-                                onClick={() => this.setActiveStudent(student, index)}
-                                key={index}
-                            >
-                                {student.name}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-                <div className="col-md-6">
-                    {currentStudent ? (
-                        <div>
-                            <div>
-                                <h4 className="float-left mr-2">Student</h4>
-                                <Link
-                                    to={"/student/" + currentStudent.id}
-                                    className="btn btn-warning"
-                                >
-                                    Show
-                                </Link>
-                            </div>
-                            {ComponentLibrary.listDiv('Name', currentStudent.name)}
-                            {ComponentLibrary.listDiv('Email', currentStudent.email)}
-                            {ComponentLibrary.listDiv('Card Number', currentStudent.cardNumber)}
-                            {ComponentLibrary.listDiv('Group Name', currentStudent.groupName)}
-                            {ComponentLibrary.listDiv('Subgroup', currentStudent.subgroup)}
-                        </div>
-                    ) : (
-                        <div>
-                            <br/>
-                            <span className="font-weight-bold">Please click on a Student...</span>
-                        </div>
-                    )}
-                </div>
+                <TableComponent
+                    setActive={this.setActiveStudent}
+                    info={'student'}
+                    data={students}
+                    name={'Student'}
+                    value={'name'}
+                    id={currentIndex}
+                />
+                <InfoComponent
+                    info={'student'}
+                    name={'Student'}
+                    id={currentStudent ? currentStudent.id : null}
+                    data={collectData(currentStudent)}
+                />
             </div>
         );
     }

@@ -5,6 +5,8 @@ import MovieService from "../../services/movie.service"
 import {Link} from "react-router-dom";
 import "./movie.css";
 import ComponentLibrary from "../common/view.element.component";
+import TableComponent from "../common/table.component";
+import InfoComponent from "../common/info.component";
 
 const movies = async () => {
     try {
@@ -12,6 +14,15 @@ const movies = async () => {
     } catch (e) {
         console.log("Не всё идёт по плану! " + JSON.stringify(e.response.data));
     }
+}
+
+const collectData = (movie) => {
+    const data = new Map();
+    if (movie) {
+        data.set('Name', movie.name);
+        data.set('Author', movie.author);
+    }
+    return data;
 }
 
 export default class Movie extends Component {
@@ -24,7 +35,7 @@ export default class Movie extends Component {
             redirect: null,
             userReady: false,
             currentIndex: -1,
-            currentUser: {username: ""},
+            currentUser: {username: ''},
             currentMovie: null,
             movies: []
         };
@@ -63,55 +74,20 @@ export default class Movie extends Component {
 
         return (
             <div className="list row">
-                <div className="col-md-6">
-                    <div className="mb-5">
-                        <h4 className="creation mr-2">Movie List</h4>
-                        <Link
-                            to={"/movie"}
-                            className="btn btn-primary"
-                        >
-                            Create
-                        </Link>
-                    </div>
-
-                    <ul className="list-group">
-                        {movies &&
-                        movies.map((movie, index) => (
-                            <li
-                                className={
-                                    "list-group-item " +
-                                    (index === currentIndex ? "active" : "")
-                                }
-                                onClick={() => this.setActiveMovie(movie, index)}
-                                key={index}
-                            >
-                                {movie.name}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-                <div className="col-md-6">
-                    {currentMovie ? (
-                        <div>
-                            <div>
-                                <h4 className="float-left mr-2">Movie</h4>
-                                <Link
-                                    to={"/movie/" + currentMovie.id}
-                                    className="btn btn-warning"
-                                >
-                                    Show
-                                </Link>
-                            </div>
-                            {ComponentLibrary.listDiv('Name', currentMovie.name)}
-                            {ComponentLibrary.listDiv('Author', currentMovie.author)}
-                        </div>
-                    ) : (
-                        <div>
-                            <br/>
-                            <span className="font-weight-bold">Please click on a Movie...</span>
-                        </div>
-                    )}
-                </div>
+                <TableComponent
+                    setActive={this.setActiveMovie}
+                    info={'movie'}
+                    data={movies}
+                    name={'Movie'}
+                    value={'name'}
+                    id={currentIndex}
+                />
+                <InfoComponent
+                    info={'movie'}
+                    name={'Movie'}
+                    id={currentMovie ? currentMovie.id : null}
+                    data={collectData(currentMovie)}
+                />
             </div>
         );
     }

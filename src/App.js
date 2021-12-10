@@ -12,7 +12,6 @@ import Register from "./components/auth/register.component";
 import Home from "./components/home.component";
 import Profile from "./components/auth/profile.component";
 
-// import AuthVerify from "./shared/auth-verify";
 import EventBus from "./shared/EventBus";
 import HotelView from "./components/hotel/hotel.view.component";
 import Movie from "./components/movie/movie.component";
@@ -91,7 +90,7 @@ class App extends Component {
 
     render() {
         const {
-            currentUser, showHotelBoard, showUsersBoard, showMovieBoard, showStudentBoard,
+            currentUser, showHotelBoard, showMovieBoard, showStudentBoard,
             showRegister, showLogin, showLogout
         } = this.state;
 
@@ -172,16 +171,20 @@ class App extends Component {
                 <div className="container mt-3">
                     <Switch>
                         <Route exact path={["/", "/home"]} component={Home}/>
+
                         <Route exact path="/login" component={Login}/>
                         <Route exact path="/register" component={Register}/>
                         <Route exact path="/profile" component={Profile}/>
+
                         <Route exact path="/hotels" component={Hotel} />
-                        <Route exact path="/movies" component={Movie}/>
-                        <Route exact path="/students" component={Student}/>
-                        <Route exact path="/hotel" component={HotelView} />
                         <Route exact path="/hotel/:id" component={HotelView} />
-                        <Route exact path="/movie" component={MovieView} />
+                        <Route exact path="/hotel" component={HotelView} />
+
+                        <Route exact path="/movies" component={Movie}/>
                         <Route exact path="/movie/:id" component={MovieView} />
+                        <Route exact path="/movie" component={MovieView} />
+
+                        <Route exact path="/students" component={Student}/>
                         <Route exact path="/student" component={StudentView} />
                         <Route exact path="/student/:id" component={StudentView} />
                     </Switch>
